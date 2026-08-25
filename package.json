@@ -1,0 +1,1 @@
+{"type":"module","scripts":{"dev":"vite","build":"vite build","preview":"vite preview"},"dependencies":{"@gsap/react":"latest","@vitejs/plugin-react":"latest","gsap":"latest","vite":"latest","react":"latest","react-dom":"latest"},"devDependencies":{}}
