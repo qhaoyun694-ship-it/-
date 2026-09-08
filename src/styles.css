@@ -1183,6 +1183,11 @@ main {
 }
 
 @media (max-width: 700px) {
+  .reveal {
+    opacity: 1 !important;
+    visibility: visible !important;
+    transform: none !important;
+  }
   .nav {
     top: 10px;
     width: calc(100% - 20px);

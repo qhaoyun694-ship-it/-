@@ -484,17 +484,25 @@ function App() {
           duration: 1.6,
           ease: "power2.out",
         });
-        gsap.utils
-          .toArray(".reveal")
-          .forEach((item) =>
-            gsap.from(item, {
-              autoAlpha: 0,
-              y: 24,
-              duration: 0.95,
-              ease: "power3.out",
-              scrollTrigger: { trigger: item, start: "top 84%", once: true },
-            }),
-          );
+      });
+      mm.add(
+        "(min-width: 701px) and (prefers-reduced-motion: no-preference)",
+        () => {
+          gsap.utils
+            .toArray(".reveal")
+            .forEach((item) =>
+              gsap.from(item, {
+                autoAlpha: 0,
+                y: 24,
+                duration: 0.95,
+                ease: "power3.out",
+                scrollTrigger: { trigger: item, start: "top 84%", once: true },
+              }),
+            );
+        },
+      );
+      mm.add("(max-width: 700px)", () => {
+        gsap.set(".reveal", { clearProps: "opacity,visibility,transform" });
       });
       return () => mm.revert();
     },
@@ -722,13 +730,19 @@ function App() {
           )}
           {activeCollection ? (
             <div className="group-gallery">
-              {activeCollection.works.map((work) => (
+              {activeCollection.works.map((work, index) => (
                 <button
                   className="group-photo"
                   key={work.id}
                   onClick={() => openWork(work, activeCollection.works)}
                 >
-                  <img src={work.src} alt={work.alt} loading="lazy" decoding="async" />
+                  <img
+                    src={work.src}
+                    alt={work.alt}
+                    loading={index < 4 ? "eager" : "lazy"}
+                    fetchPriority={index === 0 ? "high" : "auto"}
+                    decoding="async"
+                  />
                 </button>
               ))}
             </div>
@@ -736,7 +750,7 @@ function App() {
             <>
               {(filter === "全部" || filter === "婚礼") && (
                 <div className="wedding-groups">
-                  {weddingCollections.map((collection) => (
+                  {weddingCollections.map((collection, index) => (
                     <button
                       className={`collection-card wedding-collection-${collection.group} reveal`}
                       key={collection.group}
@@ -748,7 +762,8 @@ function App() {
                       <img
                         src={collection.cover}
                         alt={`婚礼第 ${collection.group} 组封面`}
-                        loading="lazy"
+                        loading={index < 4 ? "eager" : "lazy"}
+                        fetchPriority={index === 0 ? "high" : "auto"}
                         decoding="async"
                       />
                       <small className="collection-count">
@@ -764,7 +779,7 @@ function App() {
                     filter === "全部" ? "after-collection" : ""
                   }`}
                 >
-                  {portraitCollections.map((collection) => (
+                  {portraitCollections.map((collection, index) => (
                     <button
                       className="collection-card reveal"
                       key={collection.group}
@@ -776,7 +791,12 @@ function App() {
                       <img
                         src={collection.cover}
                         alt={`人像写真第 ${collection.group} 组封面`}
-                        loading="lazy"
+                        loading={
+                          filter === "人像写真" && index < 4 ? "eager" : "lazy"
+                        }
+                        fetchPriority={
+                          filter === "人像写真" && index === 0 ? "high" : "auto"
+                        }
                         decoding="async"
                       />
                       <small className="collection-count">
